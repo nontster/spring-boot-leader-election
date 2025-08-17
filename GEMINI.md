@@ -1,8 +1,13 @@
-# Project Overview
+# Spring Boot Leader Election Demo
 
-This is a Spring Boot project for leader election. It contains a simple REST controller that returns a message indicating the current leader. The project is configured to use Java 17 and Maven for dependency management.
+This project demonstrates how to use Spring Cloud Kubernetes for leader election.
 
-# Building and Running
+## Prerequisites
+
+*   Java 17
+*   Maven
+*   Docker
+*   Kubernetes cluster (e.g., Minikube, Docker Desktop)
 
 ## Building the project
 
@@ -12,24 +17,40 @@ To build the project, run the following command:
 ./mvnw clean install
 ```
 
-## Running the project
+## Building the container image
 
-To run the project, use the following command:
-
-```bash
-./mvnw spring-boot:run
-```
-
-Once the application is running, you can access the leader endpoint at `http://localhost:8080/leader`.
-
-## Running tests
-
-To run the tests, use the following command:
+To build the container image, run the following command:
 
 ```bash
-./mvnw test
+docker build -t leader-election-demo:latest .
 ```
 
-# Development Conventions
+## Deploying to Kubernetes
 
-The project follows the standard Spring Boot conventions. The main application class is `com.example.leader.demo.DemoApplication`. The application properties are located in `src/main/resources/application.properties`. The REST controllers are located in the `com.example.leader.demo` package.
+To deploy the application to Kubernetes, run the following commands:
+
+```bash
+kubectl apply -f kubernetes/rbac.yaml
+kubectl apply -f kubernetes/deployment.yaml
+kubectl apply -f kubernetes/service.yaml
+```
+
+## Verifying leader election
+
+To verify leader election, you can check the logs of the pods. Only one pod should be the leader at any given time.
+
+```bash
+kubectl logs -l app=leader-election-demo
+```
+
+You can also access the `/leader` endpoint to see which pod is the leader.
+
+```bash
+kubectl port-forward svc/leader-election-demo 8080:80
+```
+
+Then, in a separate terminal, run:
+
+```bash
+curl http://localhost:8080/leader
+```
