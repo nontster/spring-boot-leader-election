@@ -15,7 +15,7 @@ spec:
       serviceAccountName: leader-election-sa
       containers:
       - name: leader-election-demo
-        image: leader-election-demo:latest
-        imagePullPolicy: IfNotPresent
+        image: nontster/spring-leader:1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
