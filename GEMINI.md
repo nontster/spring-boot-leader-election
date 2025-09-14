@@ -19,11 +19,9 @@ To build the project, run the following command:
 
 ## Building the container image
 
-To build the container image, run the following command:
+The container image is built using the `docker-maven-plugin`. Running the `install` command will build the image.
 
-```bash
-docker build -t leader-election-demo:latest .
-```
+The image name is `nontster/spring-leader:1.0.1`.
 
 ## Deploying to Kubernetes
 
@@ -31,6 +29,8 @@ To deploy the application to Kubernetes, run the following commands:
 
 ```bash
 kubectl apply -f kubernetes/rbac.yaml
+kubectl apply -f kubernetes/secret.yaml
+kubectl apply -f kubernetes/configmap.yaml
 kubectl apply -f kubernetes/deployment.yaml
 kubectl apply -f kubernetes/service.yaml
 ```

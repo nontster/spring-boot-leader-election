@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.example.leader</groupId>
 	<artifactId>spring-leader</artifactId>
-	<version>1.0.1</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-leader</name>
 	<description>Leader election demo project for Spring Boot</description>
 	<url/>
@@ -56,11 +56,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-kubernetes-fabric8-leader</artifactId>
 			<version>5.0.0-M1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-kubernetes-client-config</artifactId>
-			<version>5.0.0-M2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -181,7 +176,6 @@
 						<phase>package</phase>
 						<goals>
 							<goal>build</goal>
-							<goal>save</goal>
 						</goals>
 					</execution>
 				</executions>
