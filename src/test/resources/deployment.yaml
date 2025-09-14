@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leader-election-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: leader-election-demo
+  template:
+    metadata:
+      labels:
+        app: leader-election-demo
+    spec:
+      serviceAccountName: leader-election-sa
+      containers:
+      - name: leader-election-demo
+        image: nontster/spring-leader:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+          - name: token-volume
+            mountPath: "/etc/token" # The directory where the secret will be mounted
+            readOnly: true
+      volumes:
+        - name: token-volume
+          secret:
+            secretName: shared-access-token
