@@ -17,6 +17,20 @@ To build the project, run the following command:
 ./mvnw clean install
 ```
 
+## Bumping the version
+
+To bump the version of the application, run the following command:
+
+```bash
+./bump-version.sh <new-version>
+```
+
+This will:
+
+*   Update the version in `pom.xml`.
+*   Update the image version in `kubernetes/deployment.yaml`.
+*   Update the image version in `src/test/resources/deployment.yaml`.
+
 ## Building the container image
 
 The container image is built using the `docker-maven-plugin`. Running the `install` command will build the image.
