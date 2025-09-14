@@ -114,6 +114,10 @@ class DemoApplicationIT {
 		return util.inputStream("configmap.yaml");
 	}
 
+	private static InputStream getSecret() {
+		return util.inputStream("secret.yaml");
+	}
+
 	private static InputStream getDeployment() {
 		return util.inputStream("deployment.yaml");
 	}
@@ -140,6 +144,7 @@ class DemoApplicationIT {
 			client.rbac().roles().inNamespace(NAMESPACE).load(getRole()).create();
 			client.rbac().roleBindings().inNamespace(NAMESPACE).load(getRolebinding()).create();
 			client.configMaps().inNamespace(NAMESPACE).load(getConfigMap()).create();
+			client.secrets().inNamespace(NAMESPACE).load(getSecret()).create();
 			client.serviceAccounts().inNamespace(NAMESPACE).load(getServiceAccount()).create();
 
 			Deployment deployment = client.apps().deployments().inNamespace(NAMESPACE).load(getDeployment()).get();

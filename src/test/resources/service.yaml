@@ -5,9 +5,7 @@ metadata:
 spec:
   selector:
     app: leader-election-demo
-  type: NodePort
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 8080
-      nodePort: 30080
