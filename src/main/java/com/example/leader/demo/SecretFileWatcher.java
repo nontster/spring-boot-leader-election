@@ -24,7 +24,7 @@ public class SecretFileWatcher {
     public void startWatching() throws IOException {
         watchService = FileSystems.getDefault().newWatchService();
         // Watch the DIRECTORY where the token is located
-        Path watchPath = Paths.get("/etc/");
+        Path watchPath = Paths.get("/etc/token");
 
         watchPath.register(
                 watchService,

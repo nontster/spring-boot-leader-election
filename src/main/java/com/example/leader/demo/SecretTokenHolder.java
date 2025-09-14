@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 @Component
 public class SecretTokenHolder {
     private volatile String token;
-    private final Path tokenPath = Paths.get("/etc/token");
+    private final Path tokenPath = Paths.get("/etc/token/accessToken");
 
     @PostConstruct
     public void init() {

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class LeaderElectionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LeaderElectionService.class);
     private static final String SECRET_NAME = "shared-access-token";
-    private static final String SECRET_KEY = "token";
+    private static final String SECRET_KEY = "accessToken";
 
     private final AtomicBoolean isLeader = new AtomicBoolean(false);
     private final ApplicationEventPublisher eventPublisher;
