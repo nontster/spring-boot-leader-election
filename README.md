@@ -78,7 +78,7 @@ kubectl logs -l app=leader-election-demo
 You can also access the `/leader` endpoint to see which pod is the leader.
 
 ```bash
-kubectl port-forward svc/leader-election-demo 8080:80
+kubectl port-forward svc/leader-election-demo 8080:8080
 ```
 
 Then, in a separate terminal, run:
