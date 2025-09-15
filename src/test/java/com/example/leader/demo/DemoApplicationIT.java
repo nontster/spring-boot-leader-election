@@ -2,10 +2,7 @@ package com.example.leader.demo;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
 import io.fabric8.kubernetes.api.model.Service;
-import io.fabric8.kubernetes.api.model.ServiceAccount;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.rbac.Role;
-import io.fabric8.kubernetes.api.model.rbac.RoleBinding;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterAll;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.kubernetes.integration.tests.commons.Commons;
 import org.springframework.cloud.kubernetes.integration.tests.commons.fabric8_client.Util;
 import org.testcontainers.DockerClientFactory;
-import org.testcontainers.containers.BindMode;
 import org.testcontainers.k3s.K3sContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
@@ -74,7 +70,7 @@ class DemoApplicationIT {
 	@AfterAll
 	static void afterAll() throws Exception {
 		String logs = K3S.getLogs();
-		System.out.println(logs);
+		LOG.info(logs);
 
 		// Delete Kubernetes manifests from classpath
 		deleteManifests();
@@ -141,11 +137,13 @@ class DemoApplicationIT {
 	private static void deployManifests() {
 		try {
 
+			client.serviceAccounts().inNamespace(NAMESPACE).load(getServiceAccount()).create();
 			client.rbac().roles().inNamespace(NAMESPACE).load(getRole()).create();
 			client.rbac().roleBindings().inNamespace(NAMESPACE).load(getRolebinding()).create();
 			client.configMaps().inNamespace(NAMESPACE).load(getConfigMap()).create();
 			client.secrets().inNamespace(NAMESPACE).load(getSecret()).create();
 			client.serviceAccounts().inNamespace(NAMESPACE).load(getServiceAccount()).create();
+			client.apps().deployments().inNamespace(NAMESPACE).load(getDeployment()).create();
 
 			Deployment deployment = client.apps().deployments().inNamespace(NAMESPACE).load(getDeployment()).get();
 			Service service = client.services().inNamespace(NAMESPACE).load(getService()).get();

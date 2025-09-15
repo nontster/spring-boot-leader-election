@@ -2,6 +2,8 @@ package com.example.leader.demo;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.concurrent.Executors;
 
 @Component
 public class SecretFileWatcher {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecretFileWatcher.class);
     private final SecretTokenHolder tokenHolder;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private WatchService watchService;
@@ -34,14 +37,14 @@ public class SecretFileWatcher {
 
         // Start the watching process in a separate thread
         executorService.submit(() -> {
-            System.out.println("🔍 Starting file watcher for secret token...");
+            LOGGER.info("🔍 Starting file watcher for secret token...");
             try {
                 WatchKey key;
                 while ((key = watchService.take()) != null) {
                     for (WatchEvent<?> event : key.pollEvents()) {
                         // The event context is the filename, e.g., "token"
                         // Kubernetes updates ..data, which is a symlink. This triggers an event.
-                        System.out.println("Detected event for: " + event.context());
+                        LOGGER.info("Detected event for: " + event.context());
                         // We can just reload the token regardless of the specific file event
                         tokenHolder.updateToken();
                     }
@@ -49,7 +52,7 @@ public class SecretFileWatcher {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.out.println("File watcher interrupted.");
+                LOGGER.error("File watcher interrupted.");
             }
         });
     }
@@ -61,7 +64,7 @@ public class SecretFileWatcher {
             try {
                 watchService.close();
             } catch (IOException e) {
-                System.err.println("Error closing watch service: " + e.getMessage());
+                LOGGER.error("Error closing watch service: " + e.getMessage());
             }
         }
     }

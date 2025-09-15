@@ -1,6 +1,8 @@
 package com.example.leader.demo;
 
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.nio.file.Paths;
 public class SecretTokenHolder {
     private volatile String token;
     private final Path tokenPath = Paths.get("/etc/token/accessToken");
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecretTokenHolder.class);
 
     @PostConstruct
     public void init() {
@@ -28,9 +31,9 @@ public class SecretTokenHolder {
         try {
             String newToken = new String(Files.readAllBytes(tokenPath));
             this.token = newToken;
-            System.out.println("✅ Secret token was reloaded successfully.");
+            LOGGER.info("✅ Secret token was reloaded successfully.");
         } catch (IOException e) {
-            System.err.println("🔥 Failed to reload secret token: " + e.getMessage());
+            LOGGER.error("🔥 Failed to reload secret token: " + e.getMessage());
             // Decide how to handle this error - maybe keep the old token?
         }
     }
