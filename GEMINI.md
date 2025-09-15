@@ -35,7 +35,7 @@ This will:
 
 The container image is built using the `docker-maven-plugin`. Running the `install` command will build the image.
 
-The image name is `nontster/spring-leader:1.0.1`.
+The image name is `nontster/spring-leader:<version>`.
 
 ## Deploying to Kubernetes
 
@@ -85,4 +85,50 @@ Then, in a separate terminal, run:
 
 ```bash
 curl http://localhost:8080/leader
+```
+
+## Class Diagram
+
+```mermaid
+classDiagram
+    class DemoApplication {
+        +main(String[] args)
+    }
+
+    class LeaderElectionController {
+        -LeaderElectionService leaderElectionService
+        -SecretTokenHolder tokenHolder
+        +getLeader() String
+        +onGranted(OnGrantedEvent event)
+        +onRevoked(OnRevokedEvent event)
+    }
+
+    class LeaderElectionService {
+        -AtomicBoolean isLeader
+        -ApplicationEventPublisher eventPublisher
+        -KubernetesClient kubernetesClient
+        +isLeader() boolean
+        +onGranted(OnGrantedEvent event)
+        +onRevoked(OnRevokedEvent event)
+        -fetchTokenFromAuthService() String
+    }
+
+    class SecretTokenHolder {
+        -String token
+        -Path tokenPath
+        +getToken() String
+        +updateToken()
+    }
+
+    class SecretFileWatcher {
+        -SecretTokenHolder tokenHolder
+        -ExecutorService executorService
+        -WatchService watchService
+        +startWatching()
+        +stopWatching()
+    }
+
+    LeaderElectionController --> LeaderElectionService
+    LeaderElectionController --> SecretTokenHolder
+    SecretFileWatcher --> SecretTokenHolder
 ```
