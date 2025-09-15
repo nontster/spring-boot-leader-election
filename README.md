@@ -21,34 +21,34 @@ To build the project, run the following command:
 This command will compile the source code, run tests, and package the application into a JAR file in the target/ directory.
 
 ## 🏗️ Building the Container Image
-The project uses the docker-maven-plugin to build a container image. The image is built automatically when you run the install command.
+The project uses the `docker-maven-plugin` to build a container image. The image is built automatically when you run the install command.
 
-The image will be named nontster/spring-leader:<version>, where <version> is the version specified in the pom.xml file.
+The image will be named `nontster/spring-leader:<version>`, where `<version>` is the version specified in the `pom.xml` file.
 
 ## ⬆️ Bumping the version
 
-A helper script is provided to simplify the process of updating the application version. To bump the version, use the bump-version.sh script:
+A helper script is provided to simplify the process of updating the application version. To bump the version, use the `bump-version.sh` script:
 
 ```bash
 ./bump-version.sh <new-version>
 ```
 
-Replace <new-version> with the desired version number (e.g., 1.1.0). This script will:
+Replace `<new-version>` with the desired version number (e.g., `1.1.0`). This script will:
 
-* Update the version in the pom.xml file.
-* Update the image version in kubernetes/deployment.yaml.
-* Update the image version in src/test/resources/deployment.yaml.
+* Update the version in the `pom.xml` file.
+* Update the image version in `kubernetes/deployment.yaml`.
+* Update the image version in `src/test/resources/deployment.yaml`.
 
 ## 🎨 Design and Implementation
 This application showcases a sophisticated design for leader election and secret management in a distributed environment.
 
 ### Leader Election Mechanism
 
-The core of the leader election logic is provided by the spring-cloud-kubernetes-fabric8-leader library. This library leverages Kubernetes resources to implement a distributed locking mechanism.
+The core of the leader election logic is provided by the `spring-cloud-kubernetes-fabric8-leader` library. This library leverages Kubernetes resources to implement a distributed locking mechanism.
 
 Here's how it works:
 
-1. **ConfigMap Lock**: The application instances compete to acquire a lock on a shared ConfigMap in the Kubernetes cluster (named leader in this project).
+1. **ConfigMap Lock**: The application instances compete to acquire a lock on a shared `ConfigMap` in the Kubernetes cluster (named `leader` in this project).
 
 2. **Leader Election**: The instance that successfully acquires the lock becomes the leader. The other instances will continue to attempt to acquire the lock until the current leader is terminated or relinquishes the lock.
 
